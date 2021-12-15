@@ -130,6 +130,79 @@
 
         }
 
+        public function isEmpty()
+        {
+            $sql = "select count(*) from information_schema.tables where table_type = 'BASE TABLE' and table_schema = 'sql_inmanage'";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute();
+
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if($row['count(*)'] != 0)
+            {
+                $sql = 'SELECT CASE WHEN EXISTS(SELECT 1 FROM sql_inmanage.users) THEN 0 ELSE 1 END AS isEmpty;';
+                $stmt = $this->connection->prepare($sql);
+                $stmt->execute();
+    
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+                $i = $row['isEmpty'];
+                return $i;
+            }
+            return 2;
+        }
+
+        
+        public function createTables()
+        {
+            $sql = 'USE sql_inmanage;
+
+            CREATE TABLE users (
+                user_id INT NOT NULL auto_increment,
+                user_name VARCHAR(255),
+                email VARCHAR(255),
+                PRIMARY KEY (user_id)
+            );
+            
+            CREATE TABLE posts (
+                post_id INT NOT NULL auto_increment,
+                user_id INT,
+                title VARCHAR(255),
+                content VARCHAR(255),
+                PRIMARY KEY (post_id),
+                FOREIGN KEY (user_id) REFERENCES users(user_id)
+            );
+            
+            CREATE TABLE comments (
+                comment_id INT NOT NULL auto_increment,
+                post_id INT,
+                user_id INT,
+                content LONGTEXT,
+                PRIMARY KEY (comment_id),
+                FOREIGN KEY (post_id) REFERENCES posts(post_id),
+                FOREIGN KEY (user_id) REFERENCES users(user_id)
+            );
+            
+            CREATE TABLE albums (
+                album_id INT NOT NULL auto_increment,
+                post_id INT,
+                PRIMARY KEY (album_id),
+                FOREIGN KEY (post_id) REFERENCES posts(post_id)
+            );
+            
+            CREATE TABLE photos (
+                photo_id INT NOT NULL auto_increment,
+                album_id INT,
+                link_photo VARCHAR(255),
+                link_small_photo VARCHAR(255),
+                PRIMARY KEY (photo_id),
+                FOREIGN KEY (album_id) REFERENCES albums(album_id)
+            );';
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute();
+        }
+
+
     }
 
 ?>
