@@ -1,5 +1,5 @@
 # PHP SQL Assignment
-In this assignment I was practicing PHP native, SQL server statements and functions and web service intraction using cURL.
+In this assignment I was practicing PHP native, SQL server statements and functions and web service interaction using cURL.
 
 In order to run the program make sure to follow these steps:
 1. Create the database sql_inmanage
