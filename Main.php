@@ -10,7 +10,7 @@
     include_once '.\User.php';
 
     $host = 'localhost';
-    $db_name = 'sql_inmanage';
+    $db_name = 'sql_db';
     $username = 'root';
     $password = 'h@123456';
 
