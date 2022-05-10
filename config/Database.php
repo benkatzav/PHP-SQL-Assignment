@@ -132,7 +132,7 @@
 
         public function isEmpty()
         {
-            $sql = "select count(*) from information_schema.tables where table_type = 'BASE TABLE' and table_schema = 'sql_inmanage'";
+            $sql = "select count(*) from information_schema.tables where table_type = 'BASE TABLE' and table_schema = 'sql_db'";
             $stmt = $this->connection->prepare($sql);
             $stmt->execute();
 
@@ -140,7 +140,7 @@
 
             if($row['count(*)'] != 0)
             {
-                $sql = 'SELECT CASE WHEN EXISTS(SELECT 1 FROM sql_inmanage.users) THEN 0 ELSE 1 END AS isEmpty;';
+                $sql = 'SELECT CASE WHEN EXISTS(SELECT 1 FROM sql_db.users) THEN 0 ELSE 1 END AS isEmpty;';
                 $stmt = $this->connection->prepare($sql);
                 $stmt->execute();
     
